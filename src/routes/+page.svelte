@@ -3,6 +3,7 @@
 	let radioButtonList: HTMLOListElement;
 	let textarea: HTMLTextAreaElement;
 	let trimText = true;
+	let wrapText = true;
 
 	const presets: Array<{ description: string; fn: (text: string) => string }> = [
 		{
@@ -45,6 +46,7 @@
 		const pasted = (e.target as HTMLTextAreaElement).value;
 		textarea.value = tool.fn(trimText ? pasted.trim() : pasted);
 		textarea.select();
+		if (!wrapText) textarea.scrollLeft = 0;
 	};
 </script>
 
@@ -65,14 +67,21 @@
 	bind:this={textarea}
 	cols="80"
 	rows="20"
+	wrap={wrapText ? 'soft' : 'off'}
 	on:paste={pastedTextArea}
 	on:keydown={blurTextarea}
 	disabled={checkedToolValue === undefined}
+	placeholder="Select a feature and paste the text in this box."
 />
 
 <label>
 	<input type="checkbox" bind:checked={trimText} />
 	Trim text
+</label>
+
+<label>
+	<input type="checkbox" bind:checked={wrapText} />
+	Wrap text
 </label>
 
 <style>
@@ -81,5 +90,6 @@
 	}
 	textarea {
 		display: block;
+		max-width: 100%;
 	}
 </style>
