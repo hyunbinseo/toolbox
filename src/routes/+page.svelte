@@ -4,6 +4,7 @@
 	let textarea: HTMLTextAreaElement;
 	let trimText = true;
 	let wrapText = true;
+	let processed = false;
 
 	const presets: Array<{ description: string; fn: (text: string) => string }> = [
 		{
@@ -51,6 +52,7 @@
 		await pause();
 		const pasted = (e.target as HTMLTextAreaElement).value;
 		textarea.value = tool.fn(trimText ? pasted.trim() : pasted);
+		processed = true;
 		await selectTextArea();
 		if (!wrapText) textarea.scrollLeft = 0;
 	};
@@ -69,6 +71,8 @@
 	{/each}
 </ol>
 
+<span style:visibility={processed ? 'visible' : 'hidden'}>Successfully processed text</span>
+
 <textarea
 	bind:this={textarea}
 	cols="80"
@@ -76,6 +80,8 @@
 	wrap={wrapText ? 'soft' : 'off'}
 	on:keydown={blurTextarea}
 	on:paste={pastedTextArea}
+	on:input={() => (processed = false)}
+	on:blur={() => (processed = false)}
 	disabled={checkedToolValue === undefined}
 	placeholder="Select a feature and paste the text in this box."
 />
@@ -93,6 +99,10 @@
 <style>
 	ol {
 		padding-inline-start: 20px;
+	}
+	span {
+		background-color: yellow;
+		color: black;
 	}
 	textarea {
 		display: block;
