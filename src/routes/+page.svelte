@@ -18,25 +18,31 @@
 
 	const pause = () => new Promise((resolve) => setTimeout(resolve));
 
+	const selectTextArea = async () => {
+		await pause();
+		textarea.scrollTop = 0;
+		textarea.select();
+	};
+
 	const handleKeyboardShortcut = async ({ key, keyCode }: KeyboardEvent) => {
 		if (document.activeElement === textarea) return;
 		if (keyCode === 65) {
-			await pause();
-			textarea.scrollTop = 0;
-			textarea.select();
+			await selectTextArea();
 		}
 		if (/\d/.test(key)) {
 			const number = Number(key);
 			const radioButton = radioButtonList.querySelectorAll('input[type="radio"]')[number - 1];
 			if (!radioButton) return;
 			checkedToolValue = number - 1;
-			await pause();
-			textarea.focus();
+			await selectTextArea();
 		}
 	};
 
 	const blurTextarea = async ({ key }: KeyboardEvent) => {
-		if (key === 'Escape') (document.activeElement as HTMLElement)?.blur();
+		if (key === 'Escape') {
+			(document.activeElement as HTMLElement)?.blur();
+			(radioButtonList.querySelector('input[type="radio"]:checked') as HTMLInputElement)?.focus();
+		}
 	};
 
 	const pastedTextArea = async (e: Event) => {
@@ -45,7 +51,7 @@
 		await pause();
 		const pasted = (e.target as HTMLTextAreaElement).value;
 		textarea.value = tool.fn(trimText ? pasted.trim() : pasted);
-		textarea.select();
+		await selectTextArea();
 		if (!wrapText) textarea.scrollLeft = 0;
 	};
 </script>
@@ -68,8 +74,8 @@
 	cols="80"
 	rows="20"
 	wrap={wrapText ? 'soft' : 'off'}
-	on:paste={pastedTextArea}
 	on:keydown={blurTextarea}
+	on:paste={pastedTextArea}
 	disabled={checkedToolValue === undefined}
 	placeholder="Select a feature and paste the text in this box."
 />
