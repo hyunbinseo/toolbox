@@ -1,12 +1,17 @@
 <script lang="ts">
+	let checkedToolValue: number;
 	let radioButtonList: HTMLOListElement;
 	let textarea: HTMLTextAreaElement;
-	let checkedToolValue: number;
+	let trimText = true;
 
 	const presets: Array<{ description: string; fn: (text: string) => string }> = [
 		{
-			description: 'Trim white spaces and duplicate new-lines',
-			fn: (text) => text.replaceAll(/^\s+|\s+$/g, '').replaceAll(/\n{3,}/g, '\n\n')
+			description: 'Remove all blank lines',
+			fn: (text) => text.replaceAll(/\n{2,}/g, '\n')
+		},
+		{
+			description: 'Remove duplicate blank lines',
+			fn: (text) => text.replaceAll(/\n{3,}/g, '\n\n')
 		}
 	];
 
@@ -28,7 +33,7 @@
 		if (!tool) return;
 		await new Promise((resolve) => setTimeout(resolve));
 		const pasted = (e.target as HTMLTextAreaElement).value;
-		textarea.value = tool.fn(pasted);
+		textarea.value = tool.fn(trimText ? pasted.trim() : pasted);
 		textarea.select();
 	};
 </script>
@@ -54,6 +59,11 @@
 	on:keydown={blurTextarea}
 	disabled={checkedToolValue === undefined}
 />
+
+<label>
+	<input type="checkbox" bind:checked={trimText} />
+	Trim text
+</label>
 
 <style>
 	ol {
