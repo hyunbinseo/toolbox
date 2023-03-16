@@ -5,8 +5,13 @@
 		<!-- <link rel="icon" href="%sveltekit.assets%/favicon.png" /> -->
 		<meta name="viewport" content="width=device-width" />
 		<style>
+			*,
+			::before,
+			::after {
+				box-sizing: border-box;
+			}
 			body {
-				font-family: sans-serif;
+				font-family: system-ui;
 			}
 		</style>
 		%sveltekit.head%
