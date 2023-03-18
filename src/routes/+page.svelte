@@ -9,11 +9,11 @@
 	const presets: Array<{ description: string; fn: (text: string) => string }> = [
 		{
 			description: 'Remove duplicate blank lines',
-			fn: (text) => text.replaceAll(/\n{3,}/g, '\n\n')
+			fn: (text) => text.replaceAll(/(\n *){3,}/g, '\n\n')
 		},
 		{
 			description: 'Remove all blank lines',
-			fn: (text) => text.replaceAll(/\n{2,}/g, '\n')
+			fn: (text) => text.replaceAll(/(\n *){2,}/g, '\n')
 		}
 	];
 
