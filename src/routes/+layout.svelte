@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 
-	const paths = ['text'];
+	const paths = Object.keys(import.meta.glob('./[a-z]+/+page.svelte')).map((path) =>
+		path.replace(/^\.\//, '').replace(/\/\+page\.svelte$/, '')
+	);
 
 	$: currentPath = $page.url.pathname.substring(1);
 	$: remainingPaths = paths.filter((path) => path !== currentPath);
