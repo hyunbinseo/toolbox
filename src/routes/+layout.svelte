@@ -7,6 +7,10 @@
 	$: remainingPaths = paths.filter((path) => path !== currentPath);
 </script>
 
+<svelte:head>
+	<title>{$page.data.name || ''} Tools by Hyunbin</title>
+</svelte:head>
+
 <nav>
 	<span>{currentPath || 'Home'}</span>
 	{#each remainingPaths as path (path)}
