@@ -5,10 +5,12 @@
 
 	$: currentPath = $page.url.pathname.substring(1);
 	$: remainingPaths = paths.filter((path) => path !== currentPath);
+
+	const capitalizeWord = (text: string) => `${text.charAt(0).toUpperCase()}${text.substring(1)}`;
 </script>
 
 <svelte:head>
-	<title>{$page.data.name || ''} Tools by Hyunbin</title>
+	<title>{capitalizeWord(currentPath)} Tools by Hyunbin</title>
 </svelte:head>
 
 <nav>
