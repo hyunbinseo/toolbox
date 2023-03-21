@@ -30,7 +30,7 @@
 
 <footer>
 	Tools by <a href="https://github.com/hyunbinseo/">Hyunbin</a>
-	(<a href="https://github.com/hyunbinseo/tools">Source</a>)
+	(<a href="https://github.com/hyunbinseo/tools/tree/main/src/routes{$page.route.id}">Source</a>)
 </footer>
 
 <style>
