@@ -9,11 +9,23 @@
 	const presets: Array<{ description: string; fn: (text: string) => string }> = [
 		{
 			description: 'Remove duplicate blank lines',
-			fn: (text) => text.replaceAll(/(\n *){3,}/g, '\n\n')
+			fn: (text) => text.replace(/(\r?\n *){3,}/g, '\n\n')
 		},
 		{
 			description: 'Remove all blank lines',
-			fn: (text) => text.replaceAll(/(\n *){2,}/g, '\n')
+			fn: (text) => text.replace(/(\r?\n *){2,}/g, '\n')
+		},
+		{
+			description: 'Remove all dashes (-)',
+			fn: (text) => text.replace(/-/g, '')
+		},
+		{
+			description: 'Merge every 2 lines',
+			fn: (text) =>
+				text
+					.match(/^.*\r?\n.*(?=\r?\n)?$/gm)
+					?.map((twoLines) => twoLines.replace(/ *\r?\n */, ': ').trim())
+					.join('\n') || ''
 		}
 	];
 
