@@ -1,10 +1,32 @@
 <script lang="ts">
-	import { generateMatrix } from './matrix';
+	const isInvalidDate = (date: Date) => date.toString() === 'Invalid Date';
 
-	let yearMonth: string;
+	const generateMatrix = (year: number, month: number) => {
+		// Created date objects are in local timezones.
+		const begin = new Date(year, month - 1, 1);
+		const end = new Date(year, month, 0);
 
-	$: year = yearMonth && Number(yearMonth.substring(0, 4));
-	$: month = yearMonth && Number(yearMonth.substring(5));
+		if (isInvalidDate(begin) || isInvalidDate(end)) throw TypeError();
+
+		const beginDay = begin.getDay();
+		const endDate = end.getDate();
+
+		const week = new Array<number>(7).fill(0);
+		const matrix: Array<typeof week> = [];
+
+		matrix.push(week.map((v, index) => (index >= beginDay ? index - beginDay + 1 : v)));
+
+		for (let i = 8 - beginDay; i <= endDate; i += 7) {
+			matrix.push(week.map((v, index) => (i + index <= endDate ? i + index : v)));
+		}
+
+		return matrix;
+	};
+
+	let yearMonth = new Date().toLocaleDateString('en-CA').substring(0, 7);
+
+	$: year = Number(yearMonth.substring(0, 4));
+	$: month = Number(yearMonth.substring(5));
 </script>
 
 <input bind:value={yearMonth} type="month" />
