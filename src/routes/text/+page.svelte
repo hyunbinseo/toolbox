@@ -2,28 +2,31 @@
 	let checkedToolValue: number;
 	let radioButtonList: HTMLOListElement;
 	let textarea: HTMLTextAreaElement;
-	let trimText = true;
+	let trimText = false;
 	let wrapText = true;
 	let processed = false;
 
+	// Leading and trailing spaces are handled by the trim option.
+	// Whitespace(s) between the lines should be handled by the regex.
 	const presets: Array<{ description: string; fn: (text: string) => string }> = [
 		{
-			description: 'Remove duplicate blank lines',
-			fn: (text) => text.replace(/(\r?\n *){3,}/g, '\n\n')
+			description: 'Remove duplicate blank lines (2+ into 1)',
+			fn: (text) => text.replace(/(?: *\r?\n){3,}/g, '\n\n')
 		},
 		{
-			description: 'Remove all blank lines',
-			fn: (text) => text.replace(/(\r?\n *){2,}/g, '\n')
+			description: 'Remove all blank lines (1+ into 0)',
+			fn: (text) => text.replace(/(?: *\r?\n){2,}/g, '\n')
 		},
 		{
 			description: 'Remove all dashes (-)',
 			fn: (text) => text.replace(/-/g, '')
 		},
 		{
-			description: 'Merge every 2 lines',
+			description: 'Merge every 2 lines (a↵b into a: b)',
 			fn: (text) =>
 				text
-					.match(/^.*\r?\n.*(?=\r?\n)?$/gm)
+					// Final new line may or may not exist
+					.match(/^.*\r?\n.*(?:\r?\n)?$/gm)
 					?.map((twoLines) => twoLines.replace(/ *\r?\n */, ': ').trim())
 					.join('\n') || ''
 		}
@@ -117,6 +120,7 @@
 		color: black;
 	}
 	textarea {
+		tab-size: 4;
 		display: block;
 		max-width: 100%;
 	}
