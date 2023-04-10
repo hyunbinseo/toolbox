@@ -1,5 +1,5 @@
 <script lang="ts">
-	let checkedToolValue: number;
+	let checkedToolIndex = 0;
 	let radioButtonList: HTMLOListElement;
 	let textarea: HTMLTextAreaElement;
 	let trimText = false;
@@ -8,21 +8,21 @@
 
 	// Leading and trailing spaces are handled by the trim option.
 	// Whitespace(s) between the lines should be handled by the regex.
-	const presets: Array<{ description: string; fn: (text: string) => string }> = [
+	const presets: Array<{ name: string; fn: (text: string) => string }> = [
 		{
-			description: 'Remove duplicate blank lines (2+ into 1)',
+			name: '중복 빈 줄 제거',
 			fn: (text) => text.replace(/(?: *\r?\n){3,}/g, '\n\n')
 		},
 		{
-			description: 'Remove all blank lines (1+ into 0)',
+			name: '모든 빈 줄 제거',
 			fn: (text) => text.replace(/(?: *\r?\n){2,}/g, '\n')
 		},
 		{
-			description: 'Remove all dashes (-)',
+			name: '모든 줄표 제거 (-)',
 			fn: (text) => text.replace(/-/g, '')
 		},
 		{
-			description: 'Merge every 2 lines (a↵b into a: b)',
+			name: '두 줄을 한 줄로 변경',
 			fn: (text) =>
 				text
 					// Final new line may or may not exist
@@ -31,6 +31,8 @@
 					.join('\n') || ''
 		}
 	];
+
+	$: preset = presets[checkedToolIndex];
 
 	const pause = () => new Promise((resolve) => setTimeout(resolve));
 
@@ -49,7 +51,7 @@
 			const number = Number(key);
 			const radioButton = radioButtonList.querySelectorAll('input[type="radio"]')[number - 1];
 			if (!radioButton) return;
-			checkedToolValue = number - 1;
+			checkedToolIndex = number - 1;
 			await selectTextArea();
 		}
 	};
@@ -62,11 +64,9 @@
 	};
 
 	const pastedTextArea = async (e: Event) => {
-		const tool = presets[checkedToolValue];
-		if (!tool) return;
 		await pause();
 		const pasted = (e.target as HTMLTextAreaElement).value;
-		textarea.value = tool.fn(trimText ? pasted.trim() : pasted);
+		textarea.value = preset.fn(trimText ? pasted.trim() : pasted);
 		processed = true;
 		await selectTextArea();
 		if (!wrapText) textarea.scrollLeft = 0;
@@ -76,17 +76,17 @@
 <svelte:window on:keydown={handleKeyboardShortcut} />
 
 <ol bind:this={radioButtonList}>
-	{#each presets as { description }, index}
+	{#each presets as { name }, index}
 		<li>
 			<label>
-				<input type="radio" bind:group={checkedToolValue} name="tool" value={index} />
-				{description}
+				<input type="radio" bind:group={checkedToolIndex} name="tool" value={index} />
+				{name}
 			</label>
 		</li>
 	{/each}
 </ol>
 
-<span style:visibility={processed ? 'visible' : 'hidden'}>Successfully processed text</span>
+<span style:visibility={processed ? 'visible' : 'hidden'}>변환 완료. 복사해서 사용하세요.</span>
 
 <textarea
 	bind:this={textarea}
@@ -97,24 +97,25 @@
 	on:paste={pastedTextArea}
 	on:input={() => (processed = false)}
 	on:blur={() => (processed = false)}
-	disabled={checkedToolValue === undefined}
-	placeholder="Select a feature and paste the text in this box."
+	placeholder="텍스트를 붙여 넣으면 변환이 이뤄집니다."
 />
 
-<label>
-	<input type="checkbox" bind:checked={trimText} />
-	Trim text
-</label>
-
-<label>
-	<input type="checkbox" bind:checked={wrapText} />
-	Wrap text
-</label>
+<ul>
+	<li>
+		<label>
+			<input type="checkbox" bind:checked={wrapText} />
+			입력란 폭에 맞게 줄 바꿈
+		</label>
+	</li>
+	<li>
+		<label>
+			<input type="checkbox" bind:checked={trimText} />
+			문자열 앞⋅뒤 공백 제거
+		</label>
+	</li>
+</ul>
 
 <style>
-	ol {
-		padding-inline-start: 20px;
-	}
 	span {
 		background-color: yellow;
 		color: black;
