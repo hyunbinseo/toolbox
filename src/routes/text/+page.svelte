@@ -47,53 +47,54 @@
 	};
 </script>
 
-<ul bind:this={radioButtonList}>
-	{#each presets as { name, example }, index}
-		<li>
+<form on:submit|preventDefault={processText}>
+	<fieldset>
+		<legend>기능</legend>
+		{#each presets as { name, example }, index}
 			<label>
 				<input type="radio" bind:group={checkedToolIndex} name="tool" value={index} />
 				<span>
 					{(checkedToolIndex === index ? example : name) || name}
 				</span>
 			</label>
-		</li>
-	{/each}
-</ul>
-
-<form on:submit|preventDefault={processText}>
+		{/each}
+	</fieldset>
 	<textarea
 		bind:this={textarea}
 		bind:value={text}
 		on:keydown={(e) => {
 			if (e.ctrlKey && e.keyCode === 13) processText();
 		}}
-		cols="80"
 		rows="20"
 		wrap={wrapText ? 'soft' : 'off'}
 		placeholder="텍스트를 입력하고 변환을 누르세요. (Ctrl + Enter)"
 	/>
 	<button disabled={!text}>변환</button>
-</form>
-
-<ul>
-	<li>
+	<fieldset>
+		<legend>설정</legend>
 		<label>
 			<input type="checkbox" bind:checked={wrapText} />
 			입력란 폭에 맞게 줄 바꿈
 		</label>
-	</li>
-	<li>
 		<label>
 			<input type="checkbox" bind:checked={trimText} />
 			문자열 앞⋅뒤의 공백 제거
 		</label>
-	</li>
-</ul>
+	</fieldset>
+</form>
 
 <style>
-	ul {
-		list-style: none;
-		padding-inline-start: 0;
+	form,
+	fieldset {
+		display: flex;
+		flex-direction: column;
+	}
+	form {
+		row-gap: 1rem;
+	}
+	textarea,
+	button {
+		padding: 0.75rem;
 	}
 	textarea {
 		tab-size: 4;
