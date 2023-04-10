@@ -23,15 +23,26 @@
 		return matrix;
 	};
 
-	let yearMonth = new Date().toLocaleDateString('en-CA').substring(0, 7);
+	// TODO: Utilize Date.toLocaleDateString() method.
+	// new Date().toLocaleDateString('en-CA').substring(0, 7);
+	// Reference https://github.com/sveltejs/kit/issues/9629
 
-	$: year = Number(yearMonth.substring(0, 4));
-	$: month = Number(yearMonth.substring(5));
+	let yearMonth = (() => {
+		const now = new Date();
+		const year = now.getFullYear();
+		const month = (now.getMonth() + 1).toString().padStart(2, '0');
+		return `${year}-${month}`;
+	})();
+
+	$: matrix = generateMatrix(
+		Number(yearMonth.substring(0, 4)), // YYYY
+		Number(yearMonth.substring(5)) // MM
+	);
 </script>
 
 <input bind:value={yearMonth} type="month" />
 
-{#if year && month}
+{#if matrix}
 	<table>
 		<thead>
 			<tr>
@@ -45,7 +56,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each generateMatrix(year, month) as week}
+			{#each matrix as week}
 				<tr>
 					{#each week as day}
 						<td>{day || ''}</td>
@@ -54,10 +65,16 @@
 			{/each}
 		</tbody>
 	</table>
+	<textarea
+		cols="24"
+		rows={matrix.length + 2}
+		value={`[\n${matrix.map((week) => ` [${week.join(',')}]`).join(',\n')}\n]`}
+	/>
 {/if}
 
 <style>
-	table {
+	table,
+	textarea {
 		margin-top: 1rem;
 	}
 	th,
