@@ -1,7 +1,7 @@
 <script lang="ts">
 	let checkedToolIndex = 0;
-	let radioButtonList: HTMLUListElement;
 	let textarea: HTMLTextAreaElement;
+	let textareaIsFocused = false;
 	let text = '';
 	let trimText = false;
 	let wrapText = true;
@@ -18,13 +18,13 @@
 			fn: (text) => text.replace(/(?: *\r?\n){2,}/g, '\n')
 		},
 		{
-			name: '모든 줄표 제거 (-)',
-			example: '1-2-3-4 → 1234',
+			name: '모든 붙임표 제거 (-)',
+			example: '010-1234 → 0101234',
 			fn: (text) => text.replace(/-/g, '')
 		},
 		{
-			name: '두 줄을 한 줄로 변경',
-			example: 'a↵b → a: b',
+			name: '두 줄을 한 줄로 합치기',
+			example: '순위↵1등 → 순위: 1등',
 			fn: (text) =>
 				text
 					// Final new line may or may not exist
@@ -62,14 +62,21 @@
 	<textarea
 		bind:this={textarea}
 		bind:value={text}
+		on:focus={() => (textareaIsFocused = true)}
+		on:blur={() => (textareaIsFocused = false)}
 		on:keydown={(e) => {
 			if (e.ctrlKey && e.keyCode === 13) processText();
 		}}
-		rows="20"
+		rows="15"
 		wrap={wrapText ? 'soft' : 'off'}
-		placeholder="텍스트를 입력하고 변환을 누르세요. (Ctrl + Enter)"
+		placeholder="변환할 텍스트를 입력하세요."
 	/>
-	<button disabled={!text}>변환</button>
+	<div class="control">
+		<button disabled={!text}>변환</button>
+		{#if textareaIsFocused}
+			<span class="shortcut">단축키: <kbd>Ctrl</kbd> + <kbd>Enter</kbd></span>
+		{/if}
+	</div>
 	<fieldset>
 		<legend>설정</legend>
 		<label>
@@ -84,21 +91,23 @@
 </form>
 
 <style>
-	form,
-	fieldset {
-		display: flex;
-		flex-direction: column;
+	form > * {
+		margin-top: 1rem;
 	}
-	form {
-		row-gap: 1rem;
-	}
-	textarea,
-	button {
-		padding: 0.75rem;
+	label,
+	textarea {
+		display: block;
 	}
 	textarea {
-		tab-size: 4;
-		display: block;
-		max-width: 100%;
+		width: 100%;
+		padding: 1rem;
+	}
+	.control {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.shortcut {
+		font-size: 0.875rem;
 	}
 </style>

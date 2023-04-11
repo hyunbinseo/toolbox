@@ -65,21 +65,21 @@
 			{/each}
 		</tbody>
 	</table>
-	<textarea
-		cols="24"
-		rows={matrix.length + 2}
-		value={`[\n${matrix.map((week) => ` [${week.join(',')}]`).join(',\n')}\n]`}
-	/>
+	<pre>{`[\n${matrix.map((week) => `  [${week.join(',')}]`).join(',\n')}\n]`}</pre>
 {/if}
 
 <style>
 	table,
-	textarea {
+	pre {
 		margin-top: 1rem;
+	}
+	pre {
+		user-select: text;
 	}
 	th,
 	td {
 		text-align: right;
+		min-width: 2rem;
 	}
 	th:first-child,
 	td:first-child {
