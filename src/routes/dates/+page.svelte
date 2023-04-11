@@ -22,7 +22,7 @@
 
 		const dates: string[] = [];
 
-		const date = new Date(`${startDate} GMT+09:00`);
+		const date = new Date(`${startDate}T09:00:00`);
 
 		if (Number.isNaN(date.getTime())) return [];
 
