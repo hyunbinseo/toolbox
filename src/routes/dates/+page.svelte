@@ -2,7 +2,7 @@
 	import { isHoliday } from '@hyunbinseo/holidays-kr/check';
 	import { onMount } from 'svelte';
 
-	let startDate: undefined | string; // YYYY-MM-DD
+	let startDate: undefined | string; // yyyy-MM-dd
 	let selectedDays: Array<number> = [1, 3, 5];
 	let excludeHolidays = true;
 
@@ -18,7 +18,7 @@
 	});
 
 	$: dates = (() => {
-		if (!startDate) return [];
+		if (!startDate || !selectedDays.length) return [];
 
 		const dates: string[] = [];
 
@@ -73,12 +73,16 @@
 			공휴일 제외 (월력요항 발표 연도로 한정)
 		</label>
 	</fieldset>
-	<div class="list">
-		<ol>
-			{#each dates as date}
-				<li>{date}</li>
-			{/each}
-		</ol>
+	<div class="list" style:padding={dates.length ? '0.75rem 2rem 0.5rem' : '1rem'}>
+		{#if dates.length}
+			<ol>
+				{#each dates as date}
+					<li>{date}</li>
+				{/each}
+			</ol>
+		{:else if startDate}
+			<span>해당하는 날짜가 없습니다.</span>
+		{/if}
 	</div>
 </form>
 
@@ -95,7 +99,6 @@
 	.list {
 		border: 2px solid;
 		user-select: text;
-		padding: 0.75rem 2rem 0.5rem;
 	}
 	li {
 		padding-left: 0.375rem;
