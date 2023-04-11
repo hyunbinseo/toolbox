@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import './styles.css';
 
 	const tools = {
 		'/text': {
