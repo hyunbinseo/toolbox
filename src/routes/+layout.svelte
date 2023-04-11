@@ -12,6 +12,11 @@
 			name: '월간 달력 생성',
 			description:
 				'연월에 해당하는 해당하는 JSON 데이터를 생성합니다. 이를 산출하는 자바스크립트 알고리즘도 제공합니다.'
+		},
+		'/dates': {
+			name: '반복 날짜 생성',
+			description:
+				'월수금과 같이 정기적으로 열리는 모임, 수업 등의 일정 목록을 생성합니다. 시작일과 요일 조합을 입력합니다.'
 		}
 	} satisfies Record<`/${string}`, { name: string; description: `${string}.` }>;
 
