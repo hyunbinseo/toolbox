@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	const isInvalidDate = (date: Date) => date.toString() === 'Invalid Date';
 
 	const generateMatrix = (year: number, month: number) => {
@@ -23,24 +25,22 @@
 		return matrix;
 	};
 
-	// TODO: Utilize Date.toLocaleDateString() method.
-	// new Date().toLocaleDateString('en-CA').substring(0, 7);
-	// Reference https://github.com/sveltejs/kit/issues/9629
+	let month: undefined | `${string}-${string}`; // YYYY-MM
 
-	let yearMonth = (() => {
+	onMount(() => {
 		const now = new Date();
-		const year = now.getFullYear();
-		const month = (now.getMonth() + 1).toString().padStart(2, '0');
-		return `${year}-${month}`;
-	})();
+		month = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}`;
+	});
 
-	$: matrix = generateMatrix(
-		Number(yearMonth.substring(0, 4)), // YYYY
-		Number(yearMonth.substring(5)) // MM
-	);
+	$: matrix =
+		month &&
+		generateMatrix(
+			Number(month.substring(0, 4)), // YYYY
+			Number(month.substring(5)) // MM
+		);
 </script>
 
-<input bind:value={yearMonth} type="month" />
+<input bind:value={month} type="month" />
 
 {#if matrix}
 	<table>
