@@ -1,21 +1,20 @@
 <script lang="ts">
+	import { version } from '$app/environment';
 	import { isHoliday } from '@hyunbinseo/holidays-kr/check';
-	import { onMount } from 'svelte';
 
-	let startDate: undefined | string; // yyyy-MM-dd
 	let selectedDays: Array<number> = [1, 3, 5];
 	let excludeHolidays = true;
 
 	const days = ['일', '월', '화', '수', '목', '금', '토'] as const;
 
-	onMount(() => {
-		const now = new Date();
-		startDate = [
-			now.getFullYear(),
-			(now.getMonth() + 1).toString().padStart(2, '0'),
-			now.getDate().toString().padStart(2, '0')
+	const generateStartDate = (date: Date = new Date()) =>
+		[
+			date.getFullYear(),
+			(date.getMonth() + 1).toString().padStart(2, '0'),
+			date.getDate().toString().padStart(2, '0')
 		].join('-');
-	});
+
+	let startDate = generateStartDate(new Date(Number(version))); // yyyy-MM-dd
 
 	$: dates = (() => {
 		if (!startDate || !selectedDays.length) return [];
@@ -56,6 +55,7 @@
 	<fieldset>
 		<legend>시작 날짜</legend>
 		<input bind:value={startDate} type="date" min="2022-01-01" />
+		<button type="button" on:click={() => (startDate = generateStartDate())}>오늘</button>
 	</fieldset>
 	<fieldset class="days">
 		<legend>요일</legend>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { version } from '$app/environment';
 
 	const generateMatrix = (year: number, month: number) => {
 		// Created date objects are in local timezones.
@@ -23,12 +23,10 @@
 		return matrix;
 	};
 
-	let month: undefined | `${string}-${string}`; // yyyy-MM
+	const generateMonth = (date: Date = new Date()) =>
+		`${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
 
-	onMount(() => {
-		const now = new Date();
-		month = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}`;
-	});
+	let month = generateMonth(new Date(Number(version))); // yyyy-MM
 
 	$: matrix =
 		typeof month === 'string' &&
@@ -40,7 +38,7 @@
 </script>
 
 <input bind:value={month} type="month" />
-
+<button type="button" on:click={() => (month = generateMonth())}>이번 달</button>
 {#if matrix}
 	<table>
 		<thead>
