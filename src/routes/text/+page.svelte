@@ -31,6 +31,10 @@
 					.match(/^.*\r?\n.*(?:\r?\n)?$/gm)
 					?.map((twoLines) => twoLines.replace(/ *\r?\n */, ': ').trim())
 					.join('\n') || ''
+		},
+		{
+			name: '안전한 파일명으로 변환',
+			fn: (text) => text.replace(/[<>:"/\\|?*]/g, '-').replace(/-{2,}/g, '-')
 		}
 	];
 
