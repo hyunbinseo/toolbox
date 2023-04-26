@@ -2,7 +2,11 @@
 	const presets = {
 		CJ대한통운:
 			'https://www.doortodoor.co.kr/parcel/doortodoor.do?fsp_action=PARC_ACT_002&fsp_cmd=retrieveInvNoACT&invc_no=',
-		우체국: 'https://service.epost.go.kr/trace.RetrieveRegiPrclDeliv.postal?sid1=',
+		// PC version of the website requires a POST request using HTTP.
+		// http://trace.epost.go.kr/xtts/servlet/kpl.tts.common.svl.SttSVL
+		// Therefore, it shows the following warning message on Chrome.
+		// 안전하지 않은 정보를 제출하려 함. 안전하지 않은 연결을 통해 이 양식이 제출되므로 내 정보가 다른 사용자에게 표시됩니다.
+		우체국: 'https://m.epost.go.kr/postal/mobile/mobile.trace.RetrieveDomRigiTraceList.comm?sid1=',
 		SLX택배: 'https://net.slx.co.kr/info/tracking.jsp?iv_no='
 	} satisfies Record<string, `https://${string}=`>;
 
