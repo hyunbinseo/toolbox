@@ -3,6 +3,7 @@
 		CJ대한통운:
 			'https://www.doortodoor.co.kr/parcel/doortodoor.do?fsp_action=PARC_ACT_002&fsp_cmd=retrieveInvNoACT&invc_no=',
 		SLX택배: 'https://net.slx.co.kr/info/tracking.jsp?iv_no=',
+		로젠택배: 'https://www.ilogen.com/web/personal/trace/',
 		// PC version of the website requires a POST request using HTTP.
 		// http://trace.epost.go.kr/xtts/servlet/kpl.tts.common.svl.SttSVL
 		// Therefore, it shows the following warning message on Chrome.
@@ -10,7 +11,7 @@
 		우체국: 'https://m.epost.go.kr/postal/mobile/mobile.trace.RetrieveDomRigiTraceList.comm?sid1=',
 		한진택배:
 			'https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/WaybillResult.do?mCode=MN038&schLang=KR&wblnumText2='
-	} satisfies Record<string, `https://${string}=`>;
+	} satisfies Record<string, `https://${string}`>;
 
 	let urls: string[] = [];
 
