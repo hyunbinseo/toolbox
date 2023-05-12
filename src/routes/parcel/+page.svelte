@@ -3,7 +3,9 @@
 		CJ대한통운:
 			'https://www.doortodoor.co.kr/parcel/doortodoor.do?fsp_action=PARC_ACT_002&fsp_cmd=retrieveInvNoACT&invc_no=',
 		SLX택배: 'https://net.slx.co.kr/info/tracking.jsp?iv_no=',
+		경동택배: 'https://kdexp.com/service/delivery/etc/delivery.do?barcode=',
 		로젠택배: 'https://www.ilogen.com/web/personal/trace/',
+		롯데택배: 'https://www.lotteglogis.com/home/reservation/tracking/linkView?InvNo=',
 		// PC version of the website requires a POST request using HTTP.
 		// http://trace.epost.go.kr/xtts/servlet/kpl.tts.common.svl.SttSVL
 		// Therefore, it shows the following warning message on Chrome.
