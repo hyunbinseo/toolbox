@@ -1,7 +1,6 @@
 <script lang="ts">
 	const presets = {
-		CJ대한통운:
-			'https://www.doortodoor.co.kr/parcel/doortodoor.do?fsp_action=PARC_ACT_002&fsp_cmd=retrieveInvNoACT&invc_no=',
+		CJ대한통운: 'https://www.cjlogistics.com/ko/tool/parcel/tracking?gnbInvcNo=',
 		SLX택배: 'https://net.slx.co.kr/info/tracking.jsp?iv_no=',
 		경동택배: 'https://kdexp.com/service/delivery/etc/delivery.do?barcode=',
 		로젠택배: 'https://www.ilogen.com/web/personal/trace/',
