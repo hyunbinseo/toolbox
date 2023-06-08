@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { version } from '$app/environment';
-	import { isHoliday } from '@hyunbinseo/holidays-kr/check';
+	import { isHoliday } from '@hyunbinseo/holidays-kr';
 
 	let selectedDays: Array<number> = [1, 3, 5];
 	let excludeHolidays = true;
