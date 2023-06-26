@@ -16,6 +16,11 @@
 
 	let startDate = generateStartDate(new Date(Number(version))); // yyyy-MM-dd
 
+	let copyButtonText: string;
+
+	const resetCopyButtonText = () => (copyButtonText = '복사하기');
+	resetCopyButtonText();
+
 	$: dates = (() => {
 		if (!startDate || !selectedDays.length) return [];
 
@@ -47,6 +52,8 @@
 			date.setDate(date.getDate() + 1);
 		}
 
+		resetCopyButtonText();
+
 		return dates;
 	})();
 </script>
@@ -75,6 +82,22 @@
 	</fieldset>
 	<div class="list" style:padding={dates.length ? '0.75rem 2rem 0.5rem' : '1rem'}>
 		{#if dates.length}
+			<button
+				on:click={async () => {
+					try {
+						const string = dates
+							.slice(0, selectedDays.length * 5)
+							.map((v, i) => `${i + 1}. ${v}`)
+							.join('\n');
+						await navigator.clipboard.writeText(string);
+						copyButtonText = '복사되었습니다.';
+					} catch {
+						alert('복사에 실패했습니다.');
+					}
+				}}
+			>
+				{copyButtonText}
+			</button>
 			<ol>
 				{#each dates as date}
 					<li>{date}</li>
