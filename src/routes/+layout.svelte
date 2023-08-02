@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { PUBLIC_TITLE } from '$env/static/public';
 	import './styles.css';
 
 	const tools = {
@@ -25,10 +26,10 @@
 		}
 	} satisfies Record<`/${string}`, { name: string; description: `${string}.` }>;
 
-	const { VITE_TITLE: title } = import.meta.env;
 	$: tool = tools[$page.url.pathname as keyof typeof tools];
 
-	$: pageTitle = tool ? `${tool.name} - ${title}` : title;
+	$: pageTitle = tool ? `${tool.name} - ${PUBLIC_TITLE}` : PUBLIC_TITLE;
+
 	$: pageDescription = tool
 		? tool.description
 		: '웹에서 간편하게 사용할 수 있는 유틸리티 모음집입니다. 모든 소스코드는 공개돼 있으며, 오픈소스 라이선스에 따라 자유롭게 활용할 수 있습니다.';
@@ -43,7 +44,7 @@
 </svelte:head>
 
 <nav>
-	<span>{title}</span>
+	<span>{PUBLIC_TITLE}</span>
 	{#if $page.url.pathname !== '/'}
 		<a href="/">목록으로</a>
 	{/if}
