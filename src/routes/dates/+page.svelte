@@ -1,68 +1,54 @@
 <script lang="ts">
 	import { version } from '$app/environment';
-	import { isHoliday } from '@hyunbinseo/holidays-kr';
+	import { days, formatDateString, getDates } from '.';
 
-	let selectedDays: Array<number> = [1, 3, 5];
+	const totalCount = 50;
+
+	let startDate = formatDateString({ date: new Date(Number(version)) });
+	let selectedDays = [1, 3, 5];
+
 	let excludeHolidays = true;
+	let includeNumbering = true;
+	let limitToCurrentMonth = true;
 
-	const days = ['일', '월', '화', '수', '목', '금', '토'] as const;
+	// Should work regardless of system time-zone.
+	$: dates = getDates({
+		startDate,
+		selectedDays,
+		excludeHolidays,
+		limitToCurrentMonth,
+		totalCount
+	});
 
-	const generateStartDate = (date: Date = new Date()) =>
-		[
-			date.getFullYear(),
-			(date.getMonth() + 1).toString().padStart(2, '0'),
-			date.getDate().toString().padStart(2, '0')
-		].join('-');
-
-	let startDate = generateStartDate(new Date(Number(version))); // yyyy-MM-dd
-
-	let copyButtonText: string;
-
-	const resetCopyButtonText = () => (copyButtonText = '복사하기');
-	resetCopyButtonText();
-
-	$: dates = (() => {
-		if (!startDate || !selectedDays.length) return [];
-
-		const dates: string[] = [];
-
-		const date = new Date(`${startDate}T09:00:00`);
-
-		if (Number.isNaN(date.getTime())) return [];
-
-		while (dates.length < 90) {
-			const dayIndex = (days as Readonly<string[]>).indexOf(
-				date.toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul', weekday: 'short' })
-			);
-
-			if (dayIndex === -1) throw new Error();
-
-			if (selectedDays.includes(dayIndex) && (excludeHolidays ? !isHoliday(date) : true)) {
-				dates.push(
-					date.toLocaleDateString('ko-KR', {
-						timeZone: 'Asia/Seoul',
-						year: 'numeric',
-						month: 'numeric',
-						day: 'numeric',
-						weekday: 'short'
-					})
-				);
-			}
-
-			date.setDate(date.getDate() + 1);
+	const copyDates = async (includeNumbering: boolean) => {
+		try {
+			const string = (includeNumbering ? dates.map((v, i) => `${i + 1}. ${v}`) : dates).join('\n');
+			await navigator.clipboard.writeText(string);
+			alert(`복사 완료 (순번 ${includeNumbering ? '포함' : '미포함'})`);
+		} catch {
+			alert('복사에 실패했습니다.');
 		}
-
-		resetCopyButtonText();
-
-		return dates;
-	})();
+	};
 </script>
 
 <form on:submit|preventDefault>
 	<fieldset>
 		<legend>시작 날짜</legend>
-		<input bind:value={startDate} type="date" min="2022-01-01" />
-		<button type="button" on:click={() => (startDate = generateStartDate())}>오늘</button>
+		<div class="start-date">
+			<input bind:value={startDate} type="date" min="2022-01-01" />
+			<div>
+				<button type="button" on:click={() => (startDate = formatDateString({ dayOne: true }))}>
+					이번 달 1일
+				</button>
+				<button type="button" on:click={() => (startDate = formatDateString())}>오늘</button>
+				<button
+					type="button"
+					on:click={() => (startDate = formatDateString({ dayOne: true, nextMonth: true }))}
+				>
+					다음 달 1일
+				</button>
+			</div>
+		</div>
 	</fieldset>
 	<fieldset class="days">
 		<legend>요일</legend>
@@ -77,27 +63,20 @@
 		<legend>설정</legend>
 		<label>
 			<input type="checkbox" bind:checked={excludeHolidays} />
-			공휴일 제외 (월력요항 발표 연도로 한정)
+			<span>공휴일 제외 (월력요항 기준)</span>
+		</label>
+		<label>
+			<input type="checkbox" bind:checked={limitToCurrentMonth} />
+			<span>해당 월만 생성 (말일까지만)</span>
+		</label>
+		<label>
+			<input type="checkbox" bind:checked={includeNumbering} />
+			<span>순번 포함 복사 (1. 2. 3. …)</span>
 		</label>
 	</fieldset>
 	<div class="list" style:padding={dates.length ? '0.75rem 2rem 0.5rem' : '1rem'}>
 		{#if dates.length}
-			<button
-				on:click={async () => {
-					try {
-						const string = dates
-							.slice(0, selectedDays.length * 5)
-							.map((v, i) => `${i + 1}. ${v}`)
-							.join('\n');
-						await navigator.clipboard.writeText(string);
-						copyButtonText = '복사되었습니다.';
-					} catch {
-						alert('복사에 실패했습니다.');
-					}
-				}}
-			>
-				{copyButtonText}
-			</button>
+			<button on:click={() => copyDates(includeNumbering)}>날짜 목록 복사하기</button>
 			<ol>
 				{#each dates as date}
 					<li>{date}</li>
@@ -112,6 +91,12 @@
 <style>
 	form > * {
 		margin-top: 1rem;
+	}
+	.start-date {
+		display: flex;
+		flex-direction: column;
+		width: fit-content;
+		row-gap: 0.5rem;
 	}
 	.days > label {
 		margin-right: 0.375rem;
