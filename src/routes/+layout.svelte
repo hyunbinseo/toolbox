@@ -10,7 +10,7 @@
 				'불필요한 빈 줄 제거, 휴대전화 번호나 계좌번호의 줄표(-) 제거 등 여러 가지 문자열 도구를 제공합니다.'
 		},
 		'/calendar': {
-			name: '월간 달력 생성',
+			name: '달력 배열 생성',
 			description:
 				'연월에 해당하는 해당하는 JSON 데이터를 생성합니다. 이를 산출하는 자바스크립트 알고리즘도 제공합니다.'
 		},
@@ -55,6 +55,7 @@
 <main>
 	{#if !tool}
 		<ol>
+			<li><a href="https://jamoya.one/" target="_blank">자소 분리 해결</a></li>
 			{#each Object.entries(tools) as [href, { name }]}
 				<li><a {href}>{name}</a></li>
 			{/each}
