@@ -21,12 +21,19 @@
 	});
 
 	const copyDates = async (includeNumbering: boolean) => {
+		const text = (includeNumbering ? dates.map((v, i) => `${i + 1}. ${v}`) : dates).join('\n');
 		try {
-			const string = (includeNumbering ? dates.map((v, i) => `${i + 1}. ${v}`) : dates).join('\n');
-			await navigator.clipboard.writeText(string);
-			alert(`복사 완료 (순번 ${includeNumbering ? '포함' : '미포함'})`);
+			await navigator.clipboard.writeText(text);
 		} catch {
-			alert('복사에 실패했습니다.');
+			// e.g. Android KakaoTalk in-app browser
+			const element = document.createElement('textarea');
+			element.value = text;
+			document.body.appendChild(element);
+			element.select();
+			document.execCommand('copy');
+			document.body.removeChild(element);
+		} finally {
+			alert(`복사 완료 (순번 ${includeNumbering ? '포함' : '미포함'})`);
 		}
 	};
 </script>
