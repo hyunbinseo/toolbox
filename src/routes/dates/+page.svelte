@@ -1,5 +1,9 @@
 <script lang="ts">
 	import { version } from '$app/environment';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { copyText } from '$lib/utilities';
+	import { onMount } from 'svelte';
 	import { days, formatDateString, getDates } from '.';
 
 	const totalCount = 50;
@@ -21,21 +25,26 @@
 	});
 
 	const copyDates = async (includeNumbering: boolean) => {
-		const text = (includeNumbering ? dates.map((v, i) => `${i + 1}. ${v}`) : dates).join('\n');
-		try {
-			await navigator.clipboard.writeText(text);
-		} catch {
-			// e.g. Android KakaoTalk in-app browser
-			const element = document.createElement('textarea');
-			element.value = text;
-			document.body.appendChild(element);
-			element.select();
-			document.execCommand('copy');
-			document.body.removeChild(element);
-		} finally {
-			alert(`복사 완료 (순번 ${includeNumbering ? '포함' : '미포함'})`);
-		}
+		await copyText((includeNumbering ? dates.map((v, i) => `${i + 1}. ${v}`) : dates).join('\n'));
+		alert(`복사 완료 (순번 ${includeNumbering ? '포함' : '미포함'})`);
 	};
+
+	const beginToday = () => (startDate = formatDateString());
+	const beginThis1st = () => (startDate = formatDateString({ dayOne: true }));
+	const beginNext1st = () => (startDate = formatDateString({ dayOne: true, nextMonth: true }));
+
+	onMount(async () => {
+		const days = $page.url.searchParams.get('days');
+		if (days && /^0?1?2?3?4?5?6?$/.test(days))
+			selectedDays = days.split('').map((index: string) => Number(index));
+
+		const begin = $page.url.searchParams.get('begin');
+		if (begin === 'today') beginToday();
+		if (begin === 'this-1st') beginThis1st();
+		if (begin === 'next-1st') beginNext1st();
+
+		await goto($page.url.pathname, { replaceState: true });
+	});
 </script>
 
 <form on:submit|preventDefault>
@@ -44,16 +53,9 @@
 		<div class="start-date">
 			<input bind:value={startDate} type="date" min="2022-01-01" />
 			<div>
-				<button type="button" on:click={() => (startDate = formatDateString({ dayOne: true }))}>
-					이번 달 1일
-				</button>
-				<button type="button" on:click={() => (startDate = formatDateString())}>오늘</button>
-				<button
-					type="button"
-					on:click={() => (startDate = formatDateString({ dayOne: true, nextMonth: true }))}
-				>
-					다음 달 1일
-				</button>
+				<button type="button" on:click={beginThis1st}>이번 달 1일</button>
+				<button type="button" on:click={beginToday}>오늘</button>
+				<button type="button" on:click={beginNext1st}>다음 달 1일</button>
 			</div>
 		</div>
 	</fieldset>
