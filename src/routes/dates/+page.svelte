@@ -24,14 +24,22 @@
 		totalCount
 	});
 
-	const copyDates = async (includeNumbering: boolean) => {
-		await copyText((includeNumbering ? dates.map((v, i) => `${i + 1}. ${v}`) : dates).join('\n'));
-		alert(`복사 완료 (순번 ${includeNumbering ? '포함' : '미포함'})`);
-	};
-
 	const beginToday = () => (startDate = formatDateString());
 	const beginThis1st = () => (startDate = formatDateString({ dayOne: true }));
 	const beginNext1st = () => (startDate = formatDateString({ dayOne: true, nextMonth: true }));
+
+	const copyDates = async (includeNumbering: boolean) => {
+		await copyText((includeNumbering ? dates.map((v, i) => `${i + 1}. ${v}`) : dates).join('\n'));
+		alert(`날짜 목록이 복사되었습니다. (순번 ${includeNumbering ? '포함' : '미포함'})`);
+	};
+
+	const copyUrl = async () => {
+		const url = new URL($page.url);
+		url.searchParams.append('days', selectedDays.join(''));
+		url.searchParams.append('begin', 'next-1st');
+		await copyText(url.toString());
+		alert('링크가 복사되었습니다.');
+	};
 
 	onMount(async () => {
 		const days = $page.url.searchParams.get('days');
@@ -83,9 +91,15 @@
 			<span>순번 포함 복사 (1. 2. 3. …)</span>
 		</label>
 	</fieldset>
+	<fieldset>
+		<legend>텍스트 복사</legend>
+		<button on:click={() => copyDates(includeNumbering)} disabled={!dates.length}>
+			하단 날짜 목록
+		</button>
+		<button on:click={copyUrl} disabled={!dates.length}>요일 설정 포함 링크</button>
+	</fieldset>
 	<div class="list" style:padding={dates.length ? '0.75rem 2rem 0.5rem' : '1rem'}>
 		{#if dates.length}
-			<button on:click={() => copyDates(includeNumbering)}>날짜 목록 복사하기</button>
 			<ol>
 				{#each dates as date}
 					<li>{date}</li>
