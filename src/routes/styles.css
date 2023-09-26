@@ -8,6 +8,8 @@ body {
 	word-break: keep-all;
 	line-height: 1.5;
 	margin: 1rem;
+	/* Required for Swit embedding */
+	background-color: white;
 }
 fieldset {
 	margin-inline: 0;
