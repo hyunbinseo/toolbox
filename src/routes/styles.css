@@ -1,15 +1,15 @@
 @import url('https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT.css');
-
 @import 'modern-normalize/modern-normalize.css';
 
 body {
-	user-select: none;
-	font-family: 'SUIT', sans-serif;
-	word-break: keep-all;
-	line-height: 1.5;
-	margin: 1rem;
-	/* Required for Swit embedding */
 	background-color: white;
+	font-family: 'SUIT', sans-serif;
+	margin: 1rem;
+	user-select: none;
+	word-break: keep-all;
+}
+h1 {
+	font-size: 1.5rem;
 }
 fieldset {
 	margin-inline: 0;
@@ -22,4 +22,5 @@ fieldset > legend {
 ul,
 ol {
 	padding-inline-start: 1.25rem;
+	line-height: 1.5;
 }
