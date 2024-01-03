@@ -11,7 +11,8 @@
 		// 안전하지 않은 정보를 제출하려 함. 안전하지 않은 연결을 통해 이 양식이 제출되므로 내 정보가 다른 사용자에게 표시됩니다.
 		우체국: 'https://m.epost.go.kr/postal/mobile/mobile.trace.RetrieveDomRigiTraceList.comm?sid1=',
 		한진택배:
-			'https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/WaybillResult.do?mCode=MN038&schLang=KR&wblnumText2='
+			'https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/WaybillResult.do?mCode=MN038&schLang=KR&wblnumText2=',
+		천일택배: 'https://www.chunil.co.kr/HTrace/HTrace.jsp?transNo='
 	} satisfies Record<string, `https://${string}`>;
 
 	let urls: string[] = [];
