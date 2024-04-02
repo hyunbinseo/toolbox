@@ -33,8 +33,8 @@
 
 <footer>
 	<a target="_blank" href="https://github.com/hyunbinseo">GitHub 프로필</a> ⋅
-	<a target="_blank" href="https://github.com/hyunbinseo/tools#readme">저장소</a> ⋅
-	<a href="https://github.com/hyunbinseo/tools/tree/main/src/routes{$page.route.id}">소스코드</a>
+	<a target="_blank" href="https://github.com/hyunbinseo/toolbox">저장소</a> ⋅
+	<a href="https://github.com/hyunbinseo/toolbox/tree/main/src/routes{$page.route.id}">소스코드</a>
 </footer>
 
 <style>
