@@ -1,6 +1,6 @@
 <script lang="ts">
 	const presets = {
-		CJ대한통운: 'https://www.cjlogistics.com/ko/tool/parcel/tracking?gnbInvcNo=',
+		CJ대한통운: 'https://www.cjlogistics.com/ko/tool/parcel/newTracking?gnbInvcNo=',
 		SLX택배: 'https://net.slx.co.kr/info/tracking.jsp?iv_no=',
 		경동택배: 'https://kdexp.com/service/delivery/etc/delivery.do?barcode=',
 		로젠택배: 'https://www.ilogen.com/web/personal/trace/',
