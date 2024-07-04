@@ -1,4 +1,4 @@
-import { isHoliday } from '@hyunbinseo/holidays-kr';
+import { isHolidayE } from '@hyunbinseo/holidays-kr';
 
 export const days: Readonly<string[]> = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -57,7 +57,7 @@ export const getDates = ({
 
 		if (dayIndex === -1) throw new Error();
 
-		if (selectedDays.includes(dayIndex) && (!excludeHolidays ? true : !isHoliday(date))) {
+		if (selectedDays.includes(dayIndex) && (!excludeHolidays ? true : !isHolidayE(date))) {
 			dates.push(
 				date.toLocaleDateString('ko-KR', {
 					timeZone: 'Asia/Seoul',
