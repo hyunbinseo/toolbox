@@ -11,6 +11,9 @@ importers:
       '@hyunbinseo/holidays-kr':
         specifier: ^3.2025.0
         version: 3.2025.0
+      '@hyunbinseo/tools':
+        specifier: ^0.2.0
+        version: 0.2.0
       '@sveltejs/adapter-static':
         specifier: ^3.0.2
         version: 3.0.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.3))(svelte@4.2.18)(vite@5.3.3))
@@ -238,6 +241,10 @@ packages:
   '@hyunbinseo/holidays-kr@3.2025.0':
     resolution: {integrity: sha512-X9dk+Wt8TStK2IgoSTjWzYfSgxMBensb95NuoCM/J6MffWS7xU8SDeUwE7Rw0EBKe2CAWxg1ALxV7QigaxvNDg==}
     engines: {node: '>=18'}
+
+  '@hyunbinseo/tools@0.2.0':
+    resolution: {integrity: sha512-gQhmHYKSdY8mvIp9CgmgqbUHROfXm+VWdB/m3yO6BCw06AI+QwYd6IrETVI38vhNK6MO6Z/iF9qqx2lurO9moQ==}
+    engines: {node: '>=20'}
 
   '@jridgewell/gen-mapping@0.3.5':
     resolution: {integrity: sha512-IzL8ZoEDIBRWEzlCcRhOaCupYyN5gdIK+Q6fbFdPDg6HqX6jpkItn7DFIpW9LQzXG6Df9sA7+OKnq0qlz/GaQg==}
@@ -1348,6 +1355,8 @@ snapshots:
   '@hyunbinseo/holidays-kr@3.2025.0':
     dependencies:
       valibot: 0.35.0
+
+  '@hyunbinseo/tools@0.2.0': {}
 
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:

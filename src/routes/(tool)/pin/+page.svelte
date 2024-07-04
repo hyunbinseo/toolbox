@@ -1,27 +1,32 @@
 <script lang="ts">
-	const generatePin = () => {
-		if (!(Number.isInteger(length) && length >= 1 && length <= 99)) return (pin = '');
-		let string = '';
-		while (string.length < length) {
-			const [randomValue] = crypto.getRandomValues(new Uint32Array(1));
-			string += randomValue.toString(); // 0 ~ 4294967295 (2^32-1)
-		}
-		pin = string.substring(0, length);
-	};
+	import { generatePINString } from '@hyunbinseo/tools';
 
-	let length = 4;
-	let pin = '5260';
+	let length = 6;
+	let pins: string[] = [];
 </script>
 
 <p><code>Math.random()</code>을 사용하지 않습니다.</p>
 
-<form>
+<form
+	on:submit|preventDefault={() => {
+		pins.unshift(generatePINString(length));
+		pins = pins;
+	}}
+>
 	<fieldset>
 		<legend>자릿수</legend>
-		<input type="number" min="1" max="99" size="5" bind:value={length} on:change={generatePin} />
-		<span>유효하지 않은 값입니다.</span>
+		<input
+			type="number"
+			min="1"
+			max="999"
+			required
+			bind:value={length}
+			size={length.toString().length + 3}
+		/>
+		<button>생성</button>
 	</fieldset>
-	{#if pin}
+	{#if pins.length}
+		{@const [pin] = pins}
 		<fieldset>
 			<legend>생성값</legend>
 			<input
@@ -31,7 +36,11 @@
 				readonly
 				on:click={(e) => e.currentTarget.select()}
 			/>
-			<button on:click={generatePin}>재생성</button>
+			<ol>
+				{#each pins as pin}
+					<li>{pin}</li>
+				{/each}
+			</ol>
 		</fieldset>
 	{/if}
 </form>
@@ -40,10 +49,12 @@
 	form > * {
 		margin-top: 1rem;
 	}
-	input {
+	input,
+	ol {
 		font-family: monospace;
 	}
-	input[type='number']:valid + span {
-		display: none;
+	ol {
+		list-style-type: none;
+		padding-left: 0;
 	}
 </style>
