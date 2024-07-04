@@ -18,6 +18,10 @@
 			fn: (text) => text.replace(/(?: *\r?\n){2,}/g, '\n')
 		},
 		{
+			name: '모든 줄 앞⋅뒤 공백 제거',
+			fn: (text) => text.replace(/(^ +)/gm, '').replace(/( +$)/gm, '')
+		},
+		{
 			name: '모든 붙임표 제거 (-)',
 			example: '010-1234 → 0101234',
 			fn: (text) => text.replace(/-/g, '')
@@ -89,7 +93,7 @@
 		</label>
 		<label>
 			<input type="checkbox" bind:checked={trimText} />
-			문자열 앞⋅뒤의 공백 제거
+			문자열 맨 앞⋅뒤 공백 제거
 		</label>
 	</fieldset>
 </form>
