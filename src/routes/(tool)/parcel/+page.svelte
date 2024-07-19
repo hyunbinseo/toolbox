@@ -12,7 +12,8 @@
 		우체국: 'https://m.epost.go.kr/postal/mobile/mobile.trace.RetrieveDomRigiTraceList.comm?sid1=',
 		한진택배:
 			'https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/WaybillResult.do?mCode=MN038&schLang=KR&wblnumText2=',
-		천일택배: 'https://www.chunil.co.kr/HTrace/HTrace.jsp?transNo='
+		천일택배: 'https://www.chunil.co.kr/HTrace/HTrace.jsp?transNo=',
+		큐익스프레스: 'https://www.qxpress.net/Customer/PopupTraceParcels?TrackingNo='
 	} satisfies Record<string, `https://${string}`>;
 
 	let urls: string[] = [];
