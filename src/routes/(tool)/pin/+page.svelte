@@ -3,16 +3,16 @@
 
 	let length = 6;
 	let pins: string[] = [];
+
+	const unshiftNewPin = () => {
+		pins.unshift(generatePINString(length));
+		pins = pins;
+	};
 </script>
 
 <p><code>Math.random()</code>을 사용하지 않습니다.</p>
 
-<form
-	on:submit|preventDefault={() => {
-		pins.unshift(generatePINString(length));
-		pins = pins;
-	}}
->
+<form on:submit|preventDefault={unshiftNewPin}>
 	<fieldset>
 		<legend>자릿수</legend>
 		<input
