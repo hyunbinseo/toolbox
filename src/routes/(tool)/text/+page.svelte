@@ -76,9 +76,9 @@
 			if (e.ctrlKey && e.keyCode === 13) processText();
 		}}
 		rows="15"
-		wrap={wrapText ? 'soft' : 'off'}
+		style:white-space={!wrapText ? 'pre' : null}
 		placeholder="변환할 텍스트를 입력하세요."
-	/>
+	></textarea>
 	<div class="control">
 		<button disabled={!text}>변환</button>
 		{#if textareaIsFocused}
